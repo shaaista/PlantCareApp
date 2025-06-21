@@ -3,18 +3,19 @@ package com.example.plantcareapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PlantAdapter(private val plants: List<Plant>) :
+class PlantAdapter(private val plants: MutableList<Plant>) :
     RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
 
-    class PlantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val plantImage: ImageView = itemView.findViewById(R.id.plantImageView)
-        val nameText: TextView = itemView.findViewById(R.id.plantNameText)
-        val waterText: TextView = itemView.findViewById(R.id.waterTimeText)
-        val jugIcon: ImageView = itemView.findViewById(R.id.waterButton)
+    inner class PlantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val plantImage: ImageView = itemView.findViewById(R.id.plantImage)
+        val plantNameText: TextView = itemView.findViewById(R.id.plantNameText)
+        val wateringStatusText: TextView = itemView.findViewById(R.id.wateringStatusText)
+        val waterButton: ImageButton = itemView.findViewById(R.id.waterButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
@@ -25,15 +26,34 @@ class PlantAdapter(private val plants: List<Plant>) :
 
     override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
         val plant = plants[position]
-        holder.nameText.text = plant.name
+        val context = holder.itemView.context
 
-        // Placeholder image (you can use if/else later to switch happy/sad)
-        holder.plantImage.setImageResource(R.drawable.ic_plant_placeholder)
+        // Load image by name
+        val imageResId = context.resources.getIdentifier(
+            plant.imageName, "drawable", context.packageName
+        )
+        holder.plantImage.setImageResource(
+            if (imageResId != 0) imageResId else R.drawable.ic_plant_placeholder
+        )
 
-        val daysLeft = plant.wateringIntervalDays -
-                ((System.currentTimeMillis() - plant.lastWateredTime) / (1000 * 60 * 60 * 24)).toInt()
+        holder.plantNameText.text = plant.name
 
-        holder.waterText.text = if (daysLeft <= 0) "💧 Water me!" else "💦 In $daysLeft day(s)"
+        // Show days left
+        val now = System.currentTimeMillis()
+        val nextWaterTime = plant.lastWateredTime + plant.wateringIntervalDays * 24 * 60 * 60 * 1000
+        val daysLeft = ((nextWaterTime - now) / (1000 * 60 * 60 * 24)).toInt()
+
+        holder.wateringStatusText.text = if (daysLeft <= 0) {
+            "Needs water!"
+        } else {
+            "$daysLeft day(s) left"
+        }
+
+        holder.waterButton.setOnClickListener {
+            plant.lastWateredTime = System.currentTimeMillis()
+            notifyItemChanged(position)
+            StorageHelper.savePlants(context, plants)
+        }
     }
 
     override fun getItemCount(): Int = plants.size

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PlantCareApp</string>
+    <string name="plant_image_description">Plant Image</string>
+    <string name="plant_name_label">Plant Name</string>
+    <string name="watering_status_text">3 days left</string>
+    <string name="water_plant_description">Water Plant</string>
 </resources>

@@ -18,7 +18,7 @@
             android:id="@+id/plantImage"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:contentDescription="@string/plant_image_description" />
+            android:contentDescription="Plant Image" />
 
         <LinearLayout
             android:layout_marginStart="16dp"
@@ -31,16 +31,16 @@
                 android:id="@+id/plantNameText"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:text="@string/plant_name_label"
+                android:text="Plant Name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/wateringStatusText"
                 android:textSize="14sp"
-                android:text="@string/watering_status_text"
+                android:text="3 days left"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <ImageButton
@@ -49,6 +49,6 @@
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_water_jug"
-            android:contentDescription="@string/water_plant_description" />
+            android:contentDescription="Water Plant"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
