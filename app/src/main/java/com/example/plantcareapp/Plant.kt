@@ -16,7 +16,8 @@ data class Plant(
     }
 
     fun getTimeLeft(): Long {
-        val interval = if (type == "cactus") 7 * 24 * 60 * 60 * 1000L else 5 * 60 * 1000L
+        val interval = if (type == "cactus") 2 * 60 * 1000L else 1 * 60 * 1000L
+
         return (lastWatered + interval - System.currentTimeMillis()).coerceAtLeast(0)
     }
 }

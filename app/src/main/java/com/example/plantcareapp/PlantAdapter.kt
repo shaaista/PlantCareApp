@@ -25,8 +25,10 @@ class PlantAdapter(
         val name = view.findViewById<TextView>(R.id.plantName)
         val timer = view.findViewById<TextView>(R.id.plantTimer)
 
+        // Refresh image based on plant state
         val imageId = context.resources.getIdentifier(plant.getImageName(), "drawable", context.packageName)
         image.setImageResource(imageId)
+
         name.text = plant.name
         timer.text = formatTime(plant.getTimeLeft())
 
@@ -34,6 +36,7 @@ class PlantAdapter(
 
         return view
     }
+
 
     private fun formatTime(ms: Long): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(ms)

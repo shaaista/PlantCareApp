@@ -9,6 +9,8 @@ import android.widget.GridView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.media.MediaPlayer
+import android.view.animation.ScaleAnimation
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,9 +25,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1)
+        }
         val title: TextView = findViewById(R.id.titleText)
         val grid: GridView = findViewById(R.id.gridView)
         val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -64,16 +70,35 @@ class MainActivity : AppCompatActivity() {
 
         val dialog = AlertDialog.Builder(this).setView(view).create()
         water.setOnClickListener {
+            // 💧 1. Play Watering Sound
+            val mediaPlayer = android.media.MediaPlayer.create(this, R.raw.water_sound)
+            mediaPlayer.start()
+
+            // 🌱 2. Apply Bounce Animation to Plant Image
+            val scale = android.view.animation.ScaleAnimation(
+                1f, 1.2f, 1f, 1.2f,
+                android.view.animation.Animation.RELATIVE_TO_SELF, 0.5f,
+                android.view.animation.Animation.RELATIVE_TO_SELF, 0.5f
+            )
+            scale.duration = 300
+            scale.repeatMode = android.view.animation.Animation.REVERSE
+            scale.repeatCount = 1
+            img.startAnimation(scale)
+
+            // 🕒 3. Reset Timer and Save
             plant.lastWatered = System.currentTimeMillis()
             StorageHelper.savePlants(this, plantList)
             adapter.notifyDataSetChanged()
             dialog.dismiss()
         }
 
+
         dialog.show()
     }
 
     private fun formatTime(ms: Long): String {
+
+
         val mins = ms / 60000
         val hours = mins / 60
         val days = hours / 24
