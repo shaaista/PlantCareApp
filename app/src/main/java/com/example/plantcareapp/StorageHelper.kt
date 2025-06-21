@@ -1,24 +1,23 @@
 package com.example.plantcareapp
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 object StorageHelper {
-    private const val PREF_NAME = "PlantPrefs"
-    private const val KEY_PLANTS = "plants"
+    private const val PREFS = "plant_prefs"
+    private const val KEY = "plants"
 
     fun savePlants(context: Context, plants: List<Plant>) {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val json = Gson().toJson(plants)
-        editor.putString(KEY_PLANTS, json)
-        editor.apply()
+        prefs.edit().putString(KEY, json).apply()
     }
 
     fun loadPlants(context: Context): MutableList<Plant> {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val json = prefs.getString(KEY_PLANTS, null)
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val json = prefs.getString(KEY, null)
         return if (json != null) {
             val type = object : TypeToken<MutableList<Plant>>() {}.type
             Gson().fromJson(json, type)

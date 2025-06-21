@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/card_bg"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:padding="12dp"
+    android:layout_margin="8dp">
+
+    <ImageView
+        android:id="@+id/plantImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
+
+    <TextView
+        android:id="@+id/plantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#333"/>
+
+    <TextView
+        android:id="@+id/plantTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#777"
+        android:textSize="14sp"/>
+</LinearLayout>

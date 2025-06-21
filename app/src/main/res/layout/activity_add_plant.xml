@@ -1,42 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF8F0"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="#C3E8BD">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🌿 Add Your Plant"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#6D9886" />
+    <ImageView
+        android:id="@+id/cactusImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/cactus_happy"
+        android:layout_margin="16dp"/>
 
-    <EditText
-        android:id="@+id/plantNameInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter plant name"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#F2E7D5" />
-
-    <Button
-        android:id="@+id/selectImageButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Choose Plant Image"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#A0C49D"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/savePlantButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Plant"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#6D9886"
-        android:textColor="#FFFFFF" />
+    <ImageView
+        android:id="@+id/monsteraImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/monstera_happy"
+        android:layout_margin="16dp"/>
 </LinearLayout>

@@ -1,55 +1,49 @@
 package com.example.plantcareapp
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.*
+import java.util.concurrent.TimeUnit
 
 class PlantAdapter(
-    private val plants: MutableList<Plant>
-) : RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
+    private val context: Context,
+    private val plants: List<Plant>,
+    private val onClick: (Int) -> Unit
+) : BaseAdapter() {
 
-    class PlantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val plantImage: ImageView = view.findViewById(R.id.plantImage)
-        val plantNameText: TextView = view.findViewById(R.id.plantNameText)
-        val wateringStatusText: TextView = view.findViewById(R.id.wateringStatusText)
-        val waterButton: ImageButton = view.findViewById(R.id.waterButton)
-    }
+    override fun getCount(): Int = plants.size
+    override fun getItem(position: Int): Any = plants[position]
+    override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_plant, parent, false)
-        return PlantViewHolder(view)
-    }
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.plant_item, parent, false)
 
-    override fun getItemCount(): Int = plants.size
-
-    override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
         val plant = plants[position]
+        val image = view.findViewById<ImageView>(R.id.plantImage)
+        val name = view.findViewById<TextView>(R.id.plantName)
+        val timer = view.findViewById<TextView>(R.id.plantTimer)
 
-        holder.plantNameText.text = plant.name
+        val imageId = context.resources.getIdentifier(plant.getImageName(), "drawable", context.packageName)
+        image.setImageResource(imageId)
+        name.text = plant.name
+        timer.text = formatTime(plant.getTimeLeft())
 
-        val daysLeft = plant.wateringIntervalDays -
-                ((System.currentTimeMillis() - plant.lastWateredTime) / (1000 * 60 * 60 * 24)).toInt()
+        view.setOnClickListener { onClick(position) }
 
-        holder.wateringStatusText.text =
-            if (daysLeft <= 0) "Needs Water 💧" else "$daysLeft days left"
+        return view
+    }
 
-        // Set plant image
-        val context = holder.itemView.context
-        val imageRes = context.resources.getIdentifier(
-            "${plant.imageName}_happy", "drawable", context.packageName
-        )
-        holder.plantImage.setImageResource(imageRes)
-
-        // Watering
-        holder.waterButton.setOnClickListener {
-            plant.lastWateredTime = System.currentTimeMillis()
-            StorageHelper.savePlants(holder.itemView.context, plants)
-            notifyItemChanged(position)
+    private fun formatTime(ms: Long): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(ms)
+        val hours = minutes / 60
+        val days = hours / 24
+        return when {
+            days > 0 -> "$days day(s) left"
+            hours > 0 -> "$hours hour(s) left"
+            minutes > 0 -> "$minutes min(s) left"
+            else -> "Needs water!"
         }
     }
 }

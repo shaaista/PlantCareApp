@@ -1,29 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
-    android:orientation="vertical"
-    android:padding="16dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#C3E8BD"
+    tools:context=".MainActivity">
 
     <TextView
-        android:text="Hi Plant Lover!"
-        android:textSize="24sp"
+        android:id="@+id/titleText"
+        android:text="Plant Care"
+        android:textSize="28sp"
+        android:textColor="#333333"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/addPlantButton"
-        android:text="Add Plant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/plantRecyclerView"
+    <GridView
+        android:id="@+id/gridView"
+        android:numColumns="2"
+        android:verticalSpacing="12dp"
+        android:horizontalSpacing="12dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleText"
+        android:layout_margin="16dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:src="@android:drawable/ic_input_add"
+        android:contentDescription="Add Plant"
+        android:backgroundTint="#A5D6A7" />
+</RelativeLayout>
