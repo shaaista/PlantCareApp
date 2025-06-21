@@ -8,14 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PlantAdapter(private val plants: MutableList<Plant>) :
-    RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
+class PlantAdapter(
+    private val plants: MutableList<Plant>
+) : RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
 
-    inner class PlantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val plantImage: ImageView = itemView.findViewById(R.id.plantImage)
-        val plantNameText: TextView = itemView.findViewById(R.id.plantNameText)
-        val wateringStatusText: TextView = itemView.findViewById(R.id.wateringStatusText)
-        val waterButton: ImageButton = itemView.findViewById(R.id.waterButton)
+    class PlantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val plantImage: ImageView = view.findViewById(R.id.plantImage)
+        val plantNameText: TextView = view.findViewById(R.id.plantNameText)
+        val wateringStatusText: TextView = view.findViewById(R.id.wateringStatusText)
+        val waterButton: ImageButton = view.findViewById(R.id.waterButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
@@ -24,37 +25,31 @@ class PlantAdapter(private val plants: MutableList<Plant>) :
         return PlantViewHolder(view)
     }
 
+    override fun getItemCount(): Int = plants.size
+
     override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
         val plant = plants[position]
-        val context = holder.itemView.context
-
-        // Load image by name
-        val imageResId = context.resources.getIdentifier(
-            plant.imageName, "drawable", context.packageName
-        )
-        holder.plantImage.setImageResource(
-            if (imageResId != 0) imageResId else R.drawable.ic_plant_placeholder
-        )
 
         holder.plantNameText.text = plant.name
 
-        // Show days left
-        val now = System.currentTimeMillis()
-        val nextWaterTime = plant.lastWateredTime + plant.wateringIntervalDays * 24 * 60 * 60 * 1000
-        val daysLeft = ((nextWaterTime - now) / (1000 * 60 * 60 * 24)).toInt()
+        val daysLeft = plant.wateringIntervalDays -
+                ((System.currentTimeMillis() - plant.lastWateredTime) / (1000 * 60 * 60 * 24)).toInt()
 
-        holder.wateringStatusText.text = if (daysLeft <= 0) {
-            "Needs water!"
-        } else {
-            "$daysLeft day(s) left"
-        }
+        holder.wateringStatusText.text =
+            if (daysLeft <= 0) "Needs Water 💧" else "$daysLeft days left"
 
+        // Set plant image
+        val context = holder.itemView.context
+        val imageRes = context.resources.getIdentifier(
+            "${plant.imageName}_happy", "drawable", context.packageName
+        )
+        holder.plantImage.setImageResource(imageRes)
+
+        // Watering
         holder.waterButton.setOnClickListener {
             plant.lastWateredTime = System.currentTimeMillis()
+            StorageHelper.savePlants(holder.itemView.context, plants)
             notifyItemChanged(position)
-            StorageHelper.savePlants(context, plants)
         }
     }
-
-    override fun getItemCount(): Int = plants.size
 }
