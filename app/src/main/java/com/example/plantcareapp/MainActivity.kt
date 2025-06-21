@@ -1,19 +1,21 @@
 package com.example.plantcareapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)  // 👈 this connects layout to code
+        setContentView(R.layout.activity_main)
 
         val addPlantButton = findViewById<Button>(R.id.addPlantButton)
+
         addPlantButton.setOnClickListener {
-            Toast.makeText(this, "Add Plant Button Clicked", Toast.LENGTH_SHORT).show()
+            // 👇 THIS OPENS THE AddPlantActivity SCREEN
+            val intent = Intent(this, AddPlantActivity::class.java)
+            startActivity(intent)
         }
     }
 }
-
